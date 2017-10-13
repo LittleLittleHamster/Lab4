@@ -124,4 +124,4 @@ class panel extends JPanel {
 		});
 		add(btnOpen);
 	}
-}
+}//qiaozhi
