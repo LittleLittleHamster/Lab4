@@ -3,6 +3,8 @@ package lab;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
 
 /**
  * 使用GraphViz的接口.
@@ -19,7 +21,6 @@ class GraphViz { // java 璋冪敤GraphViz
      * 路径.
      */
     private String dotPath = "";
-
     /**
      * runorder.
      */
@@ -38,26 +39,129 @@ class GraphViz { // java 璋冪敤GraphViz
     /**
      * 图.
      */
-    private StringBuilder graph = new StringBuilder();
+    private String graph;
 
     /**
      * runtime.
      */
     private Runtime runtime = Runtime.getRuntime();
+    /**
+     * 初始化日志对象.
+     */
+    private static final Logger LOGGER = Logger.getLogger(GraphViz.class);
 
+    /**
+     * dotPath的set方法.
+     * @param dotpath 参数
+     */
+    public void setDotPath(final String dotpath) {
+        this.dotPath = dotpath;
+    }
+    /**
+     * dotPath的get方法.
+     * @return dotPath
+     */
+    public String getDotPath() {
+        return dotPath;
+    }
+    /**
+     * get.
+     * @return runPath
+     */
+    public String getRunPath() {
+        return runPath;
+    }
+    /**
+     * set.
+     * @param runpath runpath
+     */
+    public void setRunPath(final String runpath) {
+        this.runPath = runpath;
+    }
+    /**
+     * get.
+     * @return dotCodeFile
+     */
+    public String getDotCodeFile() {
+        return dotCodeFile;
+    }
+    /**
+     * set.
+     * @param dotcodeFile 参数
+     */
+    public void setDotCodeFile(final String dotcodeFile) {
+        this.dotCodeFile = dotcodeFile;
+    }
+    /**
+     * get.
+     * @return rg
+     */
+    public String getResultGif() {
+        return resultGif;
+    }
+    /**
+     * set.
+     * @param resultgif 参数
+     */
+    public void setResultGif(final String resultgif) {
+        this.resultGif = resultgif;
+    }
+    /**
+     * get.
+     * @return grt
+     */
+    public Runtime getRuntime() {
+        return runtime;
+    }
+    /**
+     * set.
+     * @param runtim rt
+     */
+    public void setRuntime(final Runtime runtim) {
+        this.runtime = runtim;
+    }
+    /**
+     * get.
+     * @return runOrder
+     */
+    public String getRunOrder() {
+        return runOrder;
+    }
+    /**
+     * set.
+     * @param runorder 参数
+     */
+    public void setRunOrder(final String runorder) {
+        this.runOrder = runorder;
+    }
+    /**
+     * get.
+     * @return graph
+     */
+    public String getGraph() {
+        return graph;
+    }
+    /**
+     * set.
+     * @param graphTmp 参数
+     */
+    public void setGraph(final String graphTmp) {
+        this.graph = graphTmp;
+    }
     /**
      * 运行.
      */
     public void run() {
-        File file = new File(runPath);
+        BasicConfigurator.configure();
+        final File file = new File(runPath);
         file.mkdirs();
-        writeGraphToFile(graph.toString(), runPath);
+        writeGraphToFile(graph, runPath);
         creatOrder();
         try {
             runtime.exec(runOrder);
             runtime.exec("cmd.exe /c " + runPath + "/dotGif.gif");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("IOException");
         }
     }
 
@@ -81,16 +185,17 @@ class GraphViz { // java 璋冪敤GraphViz
      * @param filename  文件名
      */
     public void writeGraphToFile(final String dotcode, final String filename) {
+        BasicConfigurator.configure();
         try {
-            File file = new File(filename + "\\" + dotCodeFile);
+            final File file = new File(filename + "\\" + dotCodeFile);
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileOutputStream fos = new FileOutputStream(file);
+            final FileOutputStream fos = new FileOutputStream(file);
             fos.write(dotcode.getBytes());
             fos.close();
-        } catch (java.io.IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException ioe) {
+            LOGGER.error("IOException");
         }
     }
 
@@ -109,7 +214,11 @@ class GraphViz { // java 璋冪敤GraphViz
      * @param line 命令
      */
     public void add(final String line) {
-        graph.append("\t" + line);
+        final StringBuffer strTmp = new StringBuffer(graph);
+        final StringBuffer tab = new StringBuffer("\t");
+        tab.append(line);
+        strTmp.append(tab);
+        graph = strTmp.toString();
     }
 
     /**
@@ -117,27 +226,35 @@ class GraphViz { // java 璋冪敤GraphViz
      * @param line 命令
      */
     public void addln(final String line) {
-        graph.append("\t" + line + "\n");
+        final StringBuffer strTmp = new StringBuffer(graph);
+        strTmp.append("\t" + line + "\n");
+        graph = strTmp.toString();
     }
 
     /**
      * 添加命令.
      */
     public void addln() {
-        graph.append('\n');
+        final StringBuffer strTmp = new StringBuffer(graph);
+        strTmp.append('\n');
+        graph = strTmp.toString();
     }
 
     /**
      * 写{.
      */
     public void startGraph() {
-        graph.append("digraph G {\n");
+        final StringBuffer strTmp = new StringBuffer(graph);
+        strTmp.append("digraph G {\n");
+        graph = strTmp.toString();
     }
 
     /**
      * 写}.
      */
     public void endGraph() {
-        graph.append("}");
+        final StringBuffer strTmp = new StringBuffer(graph);
+        strTmp.append('}');
+        graph = strTmp.toString();
     }
 }
