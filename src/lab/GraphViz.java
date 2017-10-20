@@ -39,7 +39,7 @@ class GraphViz { // java 调用GraphViz
     /**
      * ͼ.
      */
-    private String graph;
+    private String graph = "";
 
     /**
      * runtime.

@@ -243,7 +243,7 @@ public class Graph {
         strS0 = new String[set.size()];
         inMatrix = new int[set.size()][set.size()];
         outMatrix = new int[set.size()][set.size()];
-        // 初始�?
+        // 初始化
         for (int i = 0; i < strS0.length; i++) {
             // vis[i]=0;
             for (int j = 0; j < strS0.length; j++) {
@@ -479,9 +479,8 @@ public class Graph {
     }
     /**
      * 展示.
-     * @param graTmp 图
      */
-    public void showDirectedGraph(final Graph graTmp) {
+    public void showDirectedGraph() {
         final GraphViz gViz = new GraphViz("D:\\java_Oxygen\\Lab4\\src",
                             "D:\\graphviz\\bin\\dot.exe");  // 设置好路�?
         gViz.startGraph();

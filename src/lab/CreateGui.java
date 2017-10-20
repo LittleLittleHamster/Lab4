@@ -152,7 +152,7 @@ public class CreateGui {
         final JButton jButton0 = new JButton("open"); // 添加open按钮，用来选择文件
         jButton0.setBounds(BUTTONX0, BUTTONY0, BUTTONWIDTH0, BUTTONHEIGHT);
         jButton0.setActionCommand("open");
-        jButton0.addActionListener(new ButtonClickListener());
+        jButton0.addActionListener(new Button0ClickListener());
         panel.add(jButton0);
 
         final JLabel jLabel0 = new JLabel("输入"); // 添加输入窗口
@@ -167,37 +167,37 @@ public class CreateGui {
         final JButton jButton1 = new JButton("生成图"); // 添加生成图按钮
         jButton1.setBounds(CONC40, CONC100, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton1.setActionCommand("生成图");
-        jButton1.addActionListener(new ButtonClickListener());
+        jButton1.addActionListener(new Button1ClickListener());
         panel.add(jButton1);
 
         final JButton jButton2 = new JButton("查询桥接词"); // 添加查询桥接词按钮
         jButton2.setBounds(CONC180, CONC100, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton2.setActionCommand("查询桥接词");
-        jButton2.addActionListener(new ButtonClickListener());
+        jButton2.addActionListener(new Button2ClickListener());
         panel.add(jButton2);
 
         final JButton jButton3 = new JButton("生成新文本"); // 添加生成新文本按钮
         jButton3.setBounds(CONC40, CONC140, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton3.setActionCommand("生成新文本");
-        jButton3.addActionListener(new ButtonClickListener());
+        jButton3.addActionListener(new Button3ClickListener());
         panel.add(jButton3);
 
         final JButton jButton4 = new JButton("最短路径"); // 添加最短路径按钮
         jButton4.setBounds(CONC180, CONC140, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton4.setActionCommand("最短路径");
-        jButton4.addActionListener(new ButtonClickListener());
+        jButton4.addActionListener(new Button4ClickListener());
         panel.add(jButton4);
 
         final JButton jButton5 = new JButton("随机游走"); // 添加随机游走按钮
         jButton5.setBounds(CONC40, CONC180, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton5.setActionCommand("随机游走");
-        jButton5.addActionListener(new ButtonClickListener());
+        jButton5.addActionListener(new Button5ClickListener());
         panel.add(jButton5);
 
         final JButton jButton6 = new JButton("clear"); // 添加clear按钮
         jButton6.setBounds(CONC180, CONC180, BUTTONWIDTH1, BUTTONHEIGHT);
         jButton6.setActionCommand("clear");
-        jButton6.addActionListener(new ButtonClickListener());
+        jButton6.addActionListener(new Button6ClickListener());
         panel.add(jButton6);
 
         outText = new JTextArea(); // 添加文本输出区域
@@ -217,11 +217,11 @@ public class CreateGui {
      * @author JiabinLiu
      *
      */
-    private class ButtonClickListener implements ActionListener {
+    private class Button0ClickListener implements ActionListener {
         /**
          * 构造函数.
          */
-        ButtonClickListener() {
+        Button0ClickListener() {
          // This constructor is intentionally empty. Nothing special is needed.
         };
         /**
@@ -229,97 +229,209 @@ public class CreateGui {
          * @param update 事件
          */
         public void actionPerformed(final ActionEvent update) {
-            final String command = update.getActionCommand();
-            String strx;
-            String[] strxarr;
-
-            if ("open".equals(command)) { // 打开文件功能
-                final FileDialog updatefd = new FileDialog(new JFrame(),
-                                    "选择文件", FileDialog.LOAD); // 生成打开文件窗口
-                updatefd.setFile("*.txt");
-                updatefd.setVisible(true);
-                final String filename = updatefd.getFile(); // 取得文件名
-                if (filename != null) {
-                    gra.setFilename(updatefd.getDirectory()
-                                    + updatefd.getFile());
-                    // 取得文件完整路径
-                    outText.setText("文件打开成功！\n" + gra.readInFile());
-                }
-            } else if ("生成图".equals(command)) {
-                if (gra.getFilename() == null) { // 未选择文件
-                    outText.setText(NOTCHOOSEFILE);
-                } else {
-                    outText.setText("生成图成功！图片以保存在桌面。");
-                    gra.showDirectedGraph(gra); // 展示图
-                }
-
-            } else if ("查询桥接词".equals(command)) {
-                if (gra.getFilename() == null) {
-                 // 未选择文件
-                    outText.setText(NOTCHOOSEFILE);
-                } else {
-                  strxarr = inText.getText()
-                            .replaceAll("[^a-zA-Z]", " ")
-                            .toLowerCase(Locale.US).split(REGSPACE); // 分割最小化字符串
-                    if (strxarr.length == TEMPTWO) {
-                     // 输出桥接词
-                        outText.setText(gra.queryBridgeWords(
-                            strxarr[0], strxarr[1]));
-                    } else {
-                     // 如果长度不为2，输入错误
-                        outText.setText("输入错误！");
-                    }
-
-                }
-            } else if ("生成新文本".equals(command)) {
-                if (gra.getFilename() == null) {
-                 // 未选择文件
-                    outText.setText(NOTCHOOSEFILE);
-                } else {
-                    strx = inText.getText();
-                    if (strx.split(REGSPACE).length < TEMPTWO
-                            && strx.split(REGSPACE).length > 0) {
-                     // 单词数小于2，错误
-                        outText.setText("输入错误！");
-                    } else {
-                        outText.setText(gra.generateNewText(strx)); // 输出生成的新文本
-                    }
-                }
-            } else if ("最短路径".equals(command)) {
-              strxarr = inText.getText().
-                            replaceAll("[^a-zA-Z]", " ").
-                            toLowerCase(Locale.ENGLISH).
-                            split(REGSPACE);
-                      // 分割最小化字符串
-                if (gra.getFilename() == null) {
-                 // 未选择文件
-                    outText.setText(NOTCHOOSEFILE);
-                } else {
-                    if (strxarr.length > TEMPTWO
-                        || inText.getText() == null) {  // 单词大于2
-                        outText.setText("输入错误！");
-                    } else if (strxarr.length == TEMPTWO) {
-                     // 2个单词的情况
-                        outText.setText(gra.calcShortestPath(
-                                        strxarr[0], strxarr[1]));
-                    } else if (strxarr.length == ANTEMP) {
-                     // 1个单词的情况
-                        outText.setText(gra.calcShortestPath(strxarr[0]));
-                    }
-                }
-            } else if ("随机游走".equals(command)) {
-                if (gra.getFilename() == null) {
-                 // 未选择文件
-                    outText.setText(NOTCHOOSEFILE);
-                } else {
-                    outText.setText(gra.randomWalk());
-                }
-            } else { // 清除输入输出文本区域
-                outText.setText("");
-                inText.setText("");
+            final FileDialog updatefd = new FileDialog(new JFrame(),
+                                "选择文件", FileDialog.LOAD); // 生成打开文件窗口
+            updatefd.setFile("*.txt");
+            updatefd.setVisible(true);
+            final String filename = updatefd.getFile(); // 取得文件名
+            if (filename != null) {
+                gra.setFilename(updatefd.getDirectory()
+                                + updatefd.getFile());
+                // 取得文件完整路径
+                outText.setText("文件打开成功！\n" + gra.readInFile());
             }
         }
     }
 
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button1ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button1ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            if (gra.getFilename() == null) { // 未选择文件
+                outText.setText(NOTCHOOSEFILE);
+            } else {
+                outText.setText("生成图成功！图片以保存在桌面。");
+                gra.showDirectedGraph(); // 展示图
+            }
+        }
+    }
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button2ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button2ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            String[] strxarr;
+
+            if (gra.getFilename() == null) {
+                // 未选择文件
+                   outText.setText(NOTCHOOSEFILE);
+               } else {
+                 strxarr = inText.getText()
+                           .replaceAll("[^a-zA-Z]", " ")
+                           .toLowerCase(Locale.US).split(REGSPACE); // 分割最小化字符串
+                   if (strxarr.length == TEMPTWO) {
+                    // 输出桥接词
+                       outText.setText(gra.queryBridgeWords(
+                           strxarr[0], strxarr[1]));
+                   } else {
+                    // 如果长度不为2，输入错误
+                       outText.setText("输入错误！");
+                   }
+
+               }
+        }
+    }
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button3ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button3ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            String strx;
+
+            if (gra.getFilename() == null) {
+                // 未选择文件
+                   outText.setText(NOTCHOOSEFILE);
+               } else {
+                   strx = inText.getText();
+                   if (strx.split(REGSPACE).length < TEMPTWO
+                           && strx.split(REGSPACE).length > 0) {
+                    // 单词数小于2，错误
+                       outText.setText("输入错误！");
+                   } else {
+                       outText.setText(gra.generateNewText(strx)); // 输出生成的新文本
+                   }
+               }
+
+        }
+    }
+
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button4ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button4ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            String[] strxarr;
+
+            strxarr = inText.getText().
+                    replaceAll("[^a-zA-Z]", " ").
+                    toLowerCase(Locale.ENGLISH).
+                    split(REGSPACE);
+              // 分割最小化字符串
+        if (gra.getFilename() == null) {
+         // 未选择文件
+            outText.setText(NOTCHOOSEFILE);
+        } else {
+            if (strxarr.length > TEMPTWO
+                || inText.getText() == null) {  // 单词大于2
+                outText.setText("输入错误！");
+            } else if (strxarr.length == TEMPTWO) {
+             // 2个单词的情况
+                outText.setText(gra.calcShortestPath(
+                                strxarr[0], strxarr[1]));
+            } else if (strxarr.length == ANTEMP) {
+             // 1个单词的情况
+                outText.setText(gra.calcShortestPath(strxarr[0]));
+            }
+        }
+        }
+    }
+
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button5ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button5ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            if (gra.getFilename() == null) {
+                // 未选择文件
+                   outText.setText(NOTCHOOSEFILE);
+               } else {
+                   outText.setText(gra.randomWalk());
+               }
+        }
+    }
+    /**
+     * 事件监听器.
+     * @author JiabinLiu
+     *
+     */
+    private class Button6ClickListener implements ActionListener {
+        /**
+         * 构造函数.
+         */
+        Button6ClickListener() {
+         // This constructor is intentionally empty. Nothing special is needed.
+        };
+        /**
+         * 实现actionPerformed方法.
+         * @param update 事件
+         */
+        public void actionPerformed(final ActionEvent update) {
+            outText.setText("");
+            inText.setText("");
+        }
+    }
 }
+
+
 // liulu and qiaozhi lab1
